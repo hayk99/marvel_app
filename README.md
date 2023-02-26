@@ -1,2 +1,2 @@
 # Marvel Kata
-by Haykggst
+by Hayk
