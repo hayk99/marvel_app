@@ -34,10 +34,26 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
-// SaveComic mocks base method.
-func (m *MockRepository) SaveComic(marvelComic marvel.MarvelComic) {
+// ListAllComics mocks base method.
+func (m *MockRepository) ListAllComics() []marvel.Comic {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SaveComic", marvelComic)
+	ret := m.ctrl.Call(m, "ListAllComics")
+	ret0, _ := ret[0].([]marvel.Comic)
+	return ret0
+}
+
+// ListAllComics indicates an expected call of ListAllComics.
+func (mr *MockRepositoryMockRecorder) ListAllComics() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAllComics", reflect.TypeOf((*MockRepository)(nil).ListAllComics))
+}
+
+// SaveComic mocks base method.
+func (m *MockRepository) SaveComic(marvelComic marvel.MarvelComic) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveComic", marvelComic)
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // SaveComic indicates an expected call of SaveComic.

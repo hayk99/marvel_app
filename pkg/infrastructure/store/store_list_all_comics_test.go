@@ -24,9 +24,11 @@ var _ = Describe("StoreListAllComics", func() {
 					Path:      "www.somePath.com/to/image",
 					Extension: "jpg",
 				},
-				Price: marvel.Price{
-					Type:  "printPrice",
-					Value: 1.99,
+				Prices: []marvel.Price{
+					{
+						Type:  "printPrice",
+						Value: 1.99,
+					},
 				},
 			},
 			{
@@ -36,9 +38,11 @@ var _ = Describe("StoreListAllComics", func() {
 					Path:      "www.somePath.com/to/image2",
 					Extension: "jpg",
 				},
-				Price: marvel.Price{
-					Type:  "printPrice",
-					Value: 2.99,
+				Prices: []marvel.Price{
+					{
+						Type:  "printPrice",
+						Value: 1.99,
+					},
 				},
 			},
 		}

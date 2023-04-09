@@ -23,9 +23,11 @@ var _ = Describe("StoreSaveComic", func() {
 				Path:      "www.somePath.com/to/image",
 				Extension: "jpg",
 			},
-			Price: marvel.Price{
-				Type:  "printPrice",
-				Value: 1.99,
+			Prices: []marvel.Price{
+				{
+					Type:  "printPrice",
+					Value: 1.99,
+				},
 			},
 		}
 	})

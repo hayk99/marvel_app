@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/kr/pretty"
+
 	"github.com/hayk99/marvelapp/pkg/infrastructure/marvel"
+	"github.com/hayk99/marvelapp/pkg/infrastructure/store"
 )
 
 func getEnvironmentVars() (string, string, string, error) {
@@ -33,5 +36,26 @@ func main() {
 	}
 
 	marvel_client := marvel.NewClient(baseURL, publicKey, privateKey)
+	comicStorage := store.NewStorage()
+	marvelComic, err := marvel_client.GetComicForNextWeek()
+	if err != nil {
+		fmt.Printf("error getting the comic: %w", err)
+	}
+	for _, marvelComic := range marvelComic {
+		err := comicStorage.SaveComic(marvelComic)
+		if err != nil {
+			fmt.Printf("error saving the comic: %w", err)
+		}
+	}
 
+	domainComics, err := comicStorage.ListAllComics()
+	if err != nil {
+		fmt.Printf("error listing the comics: %w", err)
+	}
+	for _, domainComic := range domainComics {
+		pretty.Print(domainComic)
+		fmt.Printf("\n")
+	}
+
+	return
 }

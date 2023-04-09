@@ -8,6 +8,6 @@ type Comic struct {
 
 //go:generate mockgen -source=$GOFILE -destination=./mocks/${GOFILE} -package=mocks
 type Repository interface {
-	SaveComic(marvelComic MarvelComic)
-	ListAllComics() []Comic
+	SaveComic(marvelComic MarvelComic) error
+	ListAllComics() ([]Comic, error)
 }

@@ -1,12 +1,14 @@
 package marvel
 
 import (
-	"bytes"
 	"crypto/md5"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/hayk99/marvelapp/pkg/domain/marvel"
 )
 
 type Client struct {
@@ -22,25 +24,31 @@ func (m *Client) buildGetComicsUrl() string {
 
 }
 
-func (m *Client) GetComicForNextWeek() (string, error) {
+func (m *Client) GetComicForNextWeek() ([]marvel.MarvelComic, error) {
 	url := m.buildGetComicsUrl()
 
 	response, err := http.Get(url)
 	defer response.Body.Close()
 	if err != nil {
-		return "", fmt.Errorf("cannot retrieve comics from marvel service")
+		return nil, fmt.Errorf("cannot retrieve comics from marvel service")
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("status code: %d, cannot retrieve comics successfull: %w", response.StatusCode, err)
+		return nil, fmt.Errorf("status code: %d, cannot retrieve comics successfull: %w", response.StatusCode, err)
 	}
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		return "", fmt.Errorf("cannot read the body: %w", err)
+		return nil, fmt.Errorf("cannot read the body: %w", err)
 	}
 
-	return bytes.NewBuffer(body).String(), nil
+	marvelResponse := marvel.Respose{}
+	err = json.Unmarshal(body, &marvelResponse)
+	if err != nil {
+		return nil, fmt.Errorf("cannot unmarshal the body: %w", err)
+	}
+
+	return marvelResponse.Data.Results, nil
 }
 
 func NewClient(baseURL, publicKey, privateKey string) *Client {

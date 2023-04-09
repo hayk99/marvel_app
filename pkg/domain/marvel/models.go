@@ -1,7 +1,7 @@
 package marvel
 
 type Thumbnail struct {
-	Path      string `json:"url"`
+	Path      string `json:"path"`
 	Extension string `json:"extension"`
 }
 
@@ -14,13 +14,23 @@ type MarvelComic struct {
 	ID        int       `json:"id"`
 	Title     string    `json:"title"`
 	Thumbnail Thumbnail `json:"thumbnail"`
-	Price     Price     `json:"prices"`
+	Prices    []Price   `json:"prices"`
+}
+
+type Data struct {
+	Results []MarvelComic `json:"results"`
+	Total   int           `json:"total"`
+}
+
+type Respose struct {
+	Code int  `json:"code"`
+	Data Data `json:"data"`
 }
 
 func ToDomain(comic MarvelComic) Comic {
 	return Comic{
 		title:        comic.Title,
 		thumbnailURL: comic.Thumbnail.Path + "." + comic.Thumbnail.Extension,
-		price:        comic.Price.Value,
+		price:        comic.Prices[0].Value,
 	}
 }

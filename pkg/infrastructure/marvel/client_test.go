@@ -24,9 +24,9 @@ var _ = Describe("Client", func() {
 
 	Context("Given the URL", func() {
 		It("retrieves the comics for the week", func() {
-			comics, err := client.GetComicForNextWeek()
+			comicsList, err := client.GetComicForNextWeek()
 			Expect(err).ToNot(HaveOccurred())
-			Expect(comics).ToNot(BeEmpty())
+			Expect(comicsList).ToNot(BeEmpty())
 		})
 	})
 })
