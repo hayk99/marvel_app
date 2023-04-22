@@ -6,7 +6,7 @@ import (
 
 	"github.com/kr/pretty"
 
-	"github.com/hayk99/marvelapp/pkg/domain/comic"
+	"github.com/hayk99/marvelapp/pkg/domain/service"
 	"github.com/hayk99/marvelapp/pkg/infrastructure/marvel"
 	"github.com/hayk99/marvelapp/pkg/infrastructure/store"
 )
@@ -36,26 +36,24 @@ func main() {
 		fmt.Printf("error getting the environment vars: %w", err)
 	}
 
-	marvel_client := marvel.NewClient(baseURL, publicKey, privateKey)
 	comicStorage := store.NewStorage()
-	marvelComic, err := marvel_client.GetComicForNextWeek()
-	if err != nil {
-		fmt.Printf("error getting the comic: %w", err)
-	}
-	for _, marvelComic := range marvelComic {
+	marvelClient := marvel.NewClient(baseURL, publicKey, privateKey)
 
-		err := comicStorage.SaveComic(comic.ToDomain(marvelComic))
-		if err != nil {
-			fmt.Printf("error saving the comic: %w", err)
-		}
+	comicService := service.NewService(comicStorage, *marvelClient)
+	err = comicService.RetrieveNextWeekComics()
+	if err != nil {
+		fmt.Errorf("error retrieving the comics: %w", err)
+		return
 	}
 
-	domainComics, err := comicStorage.ListAllComics()
+	savedComics, err := comicService.ListAllComics()
 	if err != nil {
-		fmt.Printf("error listing the comics: %w", err)
+		fmt.Errorf("error listing the comics: %w", err)
+		return
 	}
-	for _, domainComic := range domainComics {
-		pretty.Print(domainComic)
+
+	for _, comic := range savedComics {
+		pretty.Print(comic)
 		fmt.Printf("\n")
 	}
 
