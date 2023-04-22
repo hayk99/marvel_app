@@ -7,8 +7,6 @@ import (
 	"io"
 	"net/http"
 	"time"
-
-	"github.com/hayk99/marvelapp/pkg/domain/marvel"
 )
 
 type Client struct {
@@ -24,13 +22,13 @@ func (m *Client) buildGetComicsUrl() string {
 
 }
 
-func (m *Client) GetComicForNextWeek() ([]marvel.MarvelComic, error) {
+func (m *Client) GetComicForNextWeek() ([]ComicDTO, error) {
 	url := m.buildGetComicsUrl()
 
 	response, err := http.Get(url)
 	defer response.Body.Close()
 	if err != nil {
-		return nil, fmt.Errorf("cannot retrieve comics from marvel service")
+		return nil, fmt.Errorf("cannot retrieve comics from comic service")
 	}
 
 	if response.StatusCode != http.StatusOK {
@@ -42,7 +40,7 @@ func (m *Client) GetComicForNextWeek() ([]marvel.MarvelComic, error) {
 		return nil, fmt.Errorf("cannot read the body: %w", err)
 	}
 
-	marvelResponse := marvel.Respose{}
+	marvelResponse := Respose{}
 	err = json.Unmarshal(body, &marvelResponse)
 	if err != nil {
 		return nil, fmt.Errorf("cannot unmarshal the body: %w", err)

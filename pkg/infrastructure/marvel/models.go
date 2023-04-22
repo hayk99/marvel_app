@@ -10,7 +10,7 @@ type Price struct {
 	Value float32 `json:"price"`
 }
 
-type MarvelComic struct {
+type ComicDTO struct {
 	ID        int       `json:"id"`
 	Title     string    `json:"title"`
 	Thumbnail Thumbnail `json:"thumbnail"`
@@ -18,19 +18,11 @@ type MarvelComic struct {
 }
 
 type Data struct {
-	Results []MarvelComic `json:"results"`
-	Total   int           `json:"total"`
+	Results []ComicDTO `json:"results"`
+	Total   int        `json:"total"`
 }
 
 type Respose struct {
 	Code int  `json:"code"`
 	Data Data `json:"data"`
-}
-
-func ToDomain(comic MarvelComic) Comic {
-	return Comic{
-		title:        comic.Title,
-		thumbnailURL: comic.Thumbnail.Path + "." + comic.Thumbnail.Extension,
-		price:        comic.Prices[0].Value,
-	}
 }

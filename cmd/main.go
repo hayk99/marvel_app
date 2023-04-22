@@ -6,6 +6,7 @@ import (
 
 	"github.com/kr/pretty"
 
+	"github.com/hayk99/marvelapp/pkg/domain/comic"
 	"github.com/hayk99/marvelapp/pkg/infrastructure/marvel"
 	"github.com/hayk99/marvelapp/pkg/infrastructure/store"
 )
@@ -42,7 +43,8 @@ func main() {
 		fmt.Printf("error getting the comic: %w", err)
 	}
 	for _, marvelComic := range marvelComic {
-		err := comicStorage.SaveComic(marvelComic)
+
+		err := comicStorage.SaveComic(comic.ToDomain(marvelComic))
 		if err != nil {
 			fmt.Printf("error saving the comic: %w", err)
 		}
